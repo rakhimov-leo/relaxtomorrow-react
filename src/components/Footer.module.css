@@ -1,0 +1,52 @@
+.footer {
+  background: #1f2937;
+  color: #9ca3af;
+  margin-top: 48px;
+  padding: 32px 20px 24px;
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.company {
+  margin-bottom: 20px;
+}
+
+.company strong {
+  color: #e5e7eb;
+}
+
+.company p {
+  margin: 6px 0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.notice {
+  margin-top: 12px;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.links {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.links a {
+  color: #9ca3af;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.links a:hover {
+  color: #fff;
+}
+
+.copyright {
+  font-size: 0.8rem;
+  color: #6b7280;
+}

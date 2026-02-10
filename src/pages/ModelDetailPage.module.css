@@ -1,0 +1,773 @@
+/* Zamonaviy palitra: och kulrang fon, oq kartalar, to‘q ko‘k accent */
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f0f2f5;
+}
+
+.main {
+  flex: 1;
+  padding: 24px 20px 80px;
+}
+
+.inner {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: #1867c4;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.back:hover {
+  text-decoration: underline;
+}
+
+/* ===== 상단 섹션: 이미지 | 상품정보 ===== */
+.topSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+  padding: 32px 40px;
+  margin-bottom: 24px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.carrierLogo {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #9b59b6, #8e44ad);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.imageWrap {
+  width: 100%;
+  max-width: 280px;
+  aspect-ratio: 2/3;
+  background: #f8f9fa;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.productImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.rightCol {
+  padding-left: 0;
+}
+
+.modelName {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #222;
+  margin: 0 0 8px 0;
+}
+
+.storageSelect {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: #f0f2f5;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #222;
+  margin-bottom: 16px;
+}
+
+.arrow {
+  font-size: 0.7rem;
+  color: #6b7280;
+}
+
+.priceRow {
+  margin-bottom: 20px;
+}
+
+.priceOriginal {
+  font-size: 1rem;
+  color: #9ca3af;
+  text-decoration: line-through;
+  margin-right: 12px;
+}
+
+.priceSale {
+  font-size: 1.75rem;
+  color: #222;
+  font-weight: 700;
+}
+
+.infoCards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.infoCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  background: #f8f9fa;
+  border: 1px solid #eef0f2;
+  border-radius: 10px;
+}
+
+.infoIcon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.infoTitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #222;
+  margin: 0 0 2px 0;
+}
+
+.infoText {
+  font-size: 0.8rem;
+  color: #5f6368;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.btnApply {
+  width: 100%;
+  padding: 16px 24px;
+  border: none;
+  border-radius: 10px;
+  background: #1867c4;
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btnApply:hover {
+  background: #1557a8;
+}
+
+/* ===== 하단 섹션: 통신사 | 요금 상세 ===== */
+.bottomSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.bottomSection .leftCol {
+  background: #fff;
+  padding: 24px;
+  border-radius: 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.bottomSection .rightCol {
+  background: #fff;
+  padding: 24px;
+  border-radius: 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 72px;
+  align-self: start;
+  max-height: calc(100vh - 96px);
+  overflow-y: auto;
+}
+
+.sectionTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #222;
+  margin: 0 0 16px 0;
+}
+
+.bottomSection .leftCol .sectionTitle:not(:first-child) {
+  margin-top: 28px;
+}
+
+.carrierCards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.carrierCard,
+.carrierCardActive {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1px solid #eef0f2;
+  border-radius: 10px;
+  cursor: pointer;
+  background: #fff;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.carrierCard:hover {
+  border-color: #d1d5db;
+  background: #f8f9fa;
+}
+
+.carrierCardActive {
+  border-color: #1867c4;
+  background: #e8f0fe;
+}
+
+.carrierCard input,
+.carrierCardActive input {
+  margin: 0;
+  accent-color: #1867c4;
+}
+
+.carrierLogoSmall {
+  width: 40px;
+  height: 40px;
+  background: #f0f2f5;
+  color: #555;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.carrierCardActive .carrierLogoSmall {
+  background: #d2e3fc;
+  color: #1867c4;
+}
+
+.carrierText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.carrierLabel {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #222;
+}
+
+.carrierDesc {
+  font-size: 0.8rem;
+  color: #5f6368;
+}
+
+.note {
+  font-size: 0.85rem;
+  color: #5f6368;
+  margin: 0;
+}
+
+.qMark {
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+  background: #f0f2f5;
+  color: #5f6368;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4px;
+}
+
+.required {
+  font-weight: 400;
+  color: #5f6368;
+  font-size: 0.9rem;
+}
+
+/* 색상 */
+.colorSwatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.colorSwatch,
+.colorSwatchSoldOut,
+.colorSwatchActive {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid #eef0f2;
+  background: #f0f2f5;
+  font-size: 0.7rem;
+  color: #5f6368;
+  cursor: pointer;
+}
+
+.colorSwatch:hover {
+  border-color: #1867c4;
+  background: #e8f0fe;
+}
+
+.colorSwatchActive {
+  border-color: #1867c4;
+  background: #e8f0fe;
+}
+
+.colorSwatchSoldOut {
+  cursor: not-allowed;
+  opacity: 0.7;
+  border-style: dashed;
+}
+
+/* 할인 방법 */
+.discountCards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.discountCard {
+  padding: 14px 16px;
+  background: #f8f9fa;
+  border: 1px solid #eef0f2;
+  border-radius: 10px;
+}
+
+.discountCard strong {
+  color: #1867c4;
+  font-size: 0.95rem;
+}
+
+.discountCard p {
+  margin: 4px 0 0 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* 요금제 카드 */
+.planCards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.planCard,
+.planCardActive {
+  display: flex;
+  padding: 16px;
+  border: 1px solid #eef0f2;
+  border-radius: 10px;
+  cursor: pointer;
+  background: #fff;
+}
+
+.planCard:hover {
+  border-color: #d1d5db;
+}
+
+.planCardActive {
+  border-color: #1867c4;
+  background: #e8f0fe;
+}
+
+.planCard input {
+  margin-right: 12px;
+  accent-color: #1867c4;
+}
+
+.planCardContent {
+  flex: 1;
+}
+
+.planCardContent strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #222;
+}
+
+.planCardContent p {
+  margin: 2px 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.planLink {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: #1867c4;
+  text-decoration: none;
+}
+
+.planLink:hover {
+  text-decoration: underline;
+}
+
+.planPriceRow {
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
+.planBenefit {
+  color: #1867c4;
+  margin-left: 12px;
+}
+
+/* 단말기 할부 */
+.bottomSection .installmentRow {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.installBtn,
+.installBtnActive {
+  padding: 10px 20px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.installBtn:hover {
+  border-color: #1867c4;
+  background: #f8f9fa;
+}
+
+.installBtnActive {
+  border-color: #1867c4;
+  background: #e8f0fe;
+  color: #1867c4;
+}
+
+/* 탭 */
+.tabNav {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid #eef0f2;
+  margin-bottom: 16px;
+}
+
+.tabNavBtn,
+.tabNavActive {
+  padding: 12px 16px;
+  border: none;
+  background: none;
+  font-size: 0.9rem;
+  color: #555;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+
+.tabNavBtn:hover {
+  color: #222;
+}
+
+.tabNavActive {
+  color: #1867c4;
+  font-weight: 600;
+  border-bottom-color: #1867c4;
+}
+
+.tabContent {
+  margin-bottom: 28px;
+}
+
+.tabSubTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #222;
+  margin: 0 0 10px 0;
+}
+
+.tabBlock {
+  padding: 14px 0;
+  border-bottom: 1px solid #eef0f2;
+}
+
+.tabBlock strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #222;
+}
+
+.tabBlock p {
+  margin: 4px 0;
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.5;
+}
+
+.tabBadge {
+  display: inline-block;
+  padding: 2px 8px;
+  background: #f0f2f5;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  margin-bottom: 6px !important;
+}
+
+.tabNote {
+  font-size: 0.85rem !important;
+  color: #5f6368 !important;
+  margin-top: 8px !important;
+}
+
+.tabList,
+.faqList {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.7;
+}
+
+.stepsList {
+  margin: 0 0 20px 0;
+  padding-left: 22px;
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.7;
+}
+
+.stepsList li {
+  margin-bottom: 12px;
+}
+
+/* 구매후기 */
+.reviewList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.reviewCard {
+  padding: 16px;
+  background: #f8f9fa;
+  border: 1px solid #eef0f2;
+  border-radius: 10px;
+}
+
+.reviewTitle {
+  font-weight: 600;
+  color: #222;
+  margin: 0 0 8px 0;
+  font-size: 0.95rem;
+}
+
+.reviewText {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* 오른쪽: 요금 상세 카드 (rasmdagidek) */
+.summaryCardTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #222;
+  margin: 0 0 8px 0;
+}
+
+.summaryCard {
+  margin-bottom: 0;
+}
+
+.priceBlock {
+  margin-bottom: 20px;
+}
+
+.priceBlock:last-of-type {
+  margin-bottom: 16px;
+}
+
+.detailRowGroupHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.detailGroup {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #222;
+  margin: 0 0 10px 0;
+}
+
+.detailRowGroupHeader .detailGroup {
+  margin: 0;
+}
+
+.detailRow,
+.detailRowIndent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #555;
+  padding: 5px 0;
+}
+
+.detailRowIndent {
+  padding-left: 12px;
+}
+
+.detailRow span:last-child,
+.detailRowIndent span:last-child {
+  color: #222;
+  font-weight: 400;
+}
+
+.detailValueBold {
+  font-weight: 700 !important;
+  color: #222 !important;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  background: #f0f2f5;
+  color: #222;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: 6px;
+  margin-left: 4px;
+}
+
+.minus {
+  color: #1867c4 !important;
+  font-weight: 600;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0 0 0;
+  margin-top: 16px;
+  border-top: 1px solid #eef0f2;
+}
+
+.totalLabel {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1867c4;
+}
+
+.totalValue {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1867c4;
+}
+
+.btnApplyFull {
+  width: 100%;
+  margin-top: 20px;
+  padding: 16px 24px;
+  border: none;
+  border-radius: 10px;
+  background: #1867c4;
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btnApplyFull:hover {
+  background: #1557a8;
+}
+
+.notFound {
+  font-size: 1.1rem;
+  color: #5f6368;
+  margin-bottom: 16px;
+}
+
+/* FAQ 플로팅 버튼 */
+.faqBtn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  background: #fff;
+  color: #555;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eef0f2;
+}
+
+.faqBtn:hover {
+  background: #f0f2f5;
+  color: #222;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .topSection,
+  .bottomSection {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .leftCol {
+    align-items: center;
+  }
+
+  .imageWrap {
+    max-width: 220px;
+  }
+
+  .carrierLogo {
+    margin-bottom: 12px;
+  }
+}
