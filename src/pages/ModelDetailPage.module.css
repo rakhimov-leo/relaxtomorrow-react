@@ -333,26 +333,49 @@
   height: 48px;
   border-radius: 50%;
   border: 2px solid #eef0f2;
-  background: #f0f2f5;
+  background: #f9fafb;
   font-size: 0.7rem;
   color: #5f6368;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.colorSwatch::before,
+.colorSwatchActive::before,
+.colorSwatchSoldOut::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 999px;
+  background: var(--swatch-color, #f0f2f5);
 }
 
 .colorSwatch:hover {
   border-color: #1867c4;
-  background: #e8f0fe;
 }
 
 .colorSwatchActive {
   border-color: #1867c4;
-  background: #e8f0fe;
 }
 
 .colorSwatchSoldOut {
   cursor: not-allowed;
-  opacity: 0.7;
-  border-style: dashed;
+}
+
+.colorSwatchSoldOut::before {
+  opacity: 0.4;
+}
+
+.colorSwatchSoldOut::after {
+  content: '';
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: 50%;
+  height: 2px;
+  background: rgba(148, 163, 184, 0.9);
+  transform: rotate(-30deg);
 }
 
 /* 할인 방법 */
@@ -718,6 +741,469 @@
 
 .btnApplyFull:hover {
   background: #1557a8;
+}
+
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.modal {
+  width: 360px;
+  max-width: 90vw;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.3);
+  padding: 28px 24px 22px;
+  position: relative;
+  text-align: center;
+}
+
+.modalClose {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  border: none;
+  background: none;
+  font-size: 18px;
+  color: #9ca3af;
+  cursor: pointer;
+}
+
+.modalTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 6px 0 6px;
+}
+
+.modalText {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin: 0 0 18px;
+}
+
+.modalPrimary {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 999px;
+  border: none;
+  background: #1867c4;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.modalPrimary:hover {
+  background: #1557a8;
+}
+
+.modalSecondary {
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: #4b5563;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.modalPrimaryDisabled {
+  background: #c9ddff;
+  cursor: default;
+}
+
+.modalColorRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.modalColorLabel {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.modalColorHelp {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.modalColorSwatches {
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.modalSelectedText {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #4b5563;
+  margin: 4px 0 16px;
+}
+
+/* Step overlay (본인/가족 선택) */
+.stepOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(240, 242, 245, 0.95);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 80px;
+  z-index: 190;
+  overflow-y: auto;
+}
+
+.stepCard {
+  width: 100%;
+  max-width: 560px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.16);
+  padding: 24px 28px 20px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+.stepProgress {
+  height: 4px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+
+.stepProgressBar {
+  width: 33%;
+  height: 100%;
+  background: #1867c4;
+}
+
+.stepProgressBarWide {
+  width: 66%;
+}
+
+.stepProgressBarFull {
+  width: 100%;
+}
+
+.stepTitle {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 18px 0;
+}
+
+.stepOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.stepOption,
+.stepOptionActive {
+  width: 100%;
+  text-align: left;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  cursor: pointer;
+}
+
+.stepOptionActive {
+  border-color: #1867c4;
+  background: #e8f0fe;
+}
+
+.stepOption strong {
+  display: block;
+  font-size: 0.98rem;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.stepOption span {
+  font-size: 0.88rem;
+  color: #4b5563;
+}
+
+.stepNote {
+  font-size: 0.86rem;
+  color: #6b7280;
+  margin: 8px 2px 0 2px;
+}
+
+.stepField {
+  margin-top: 20px;
+}
+
+.stepFieldLabel {
+  font-size: 0.9rem;
+  color: #4b5563;
+  margin: 0 0 6px 0;
+}
+
+.stepGenderRow {
+  display: flex;
+  gap: 8px;
+}
+
+.stepGenderBtn,
+.stepGenderActive {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.stepGenderActive {
+  border-color: #1867c4;
+  background: #e8f0fe;
+  color: #1867c4;
+}
+
+.stepInput {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.stepInput:focus {
+  border-color: #1867c4;
+  box-shadow: 0 0 0 1px #d2e3fc;
+}
+
+.stepInputSmall {
+  max-width: 110px;
+  text-align: center;
+}
+
+.stepInputReadonly {
+  background: #f3f4f6;
+}
+
+.stepPhoneRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stepPhoneDash {
+  color: #9ca3af;
+}
+
+.stepNextBtn {
+  width: 100%;
+  margin-top: 24px;
+  padding: 14px 16px;
+  border-radius: 999px;
+  border: none;
+  background: #c9ddff;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.stepNextBtn:disabled {
+  cursor: default;
+}
+
+.stepNextBtnActive {
+  background: #1867c4;
+}
+
+.noticeBlock {
+  margin-top: 18px;
+}
+
+.noticeHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.noticeBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #e8f0fe;
+  color: #1867c4;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.noticeTitle {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #111827;
+  font-weight: 600;
+}
+
+.noticeList {
+  margin: 0 0 10px 0;
+  padding-left: 18px;
+  font-size: 0.9rem;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.noticeBtn {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.noticeBtn:hover {
+  background: #f9fafb;
+}
+
+.noticeBtnActive {
+  border-color: #1867c4;
+  background: #e8f0fe;
+  color: #1867c4;
+}
+
+.noticeAllBtn {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px 16px;
+  border-radius: 999px;
+  border: none;
+  background: #1867c4;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* 약관동의 step */
+.agreeSummary {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 10px;
+}
+
+.agreeLabel {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin: 0 0 2px 0;
+}
+
+.agreeValue {
+  font-size: 0.95rem;
+  color: #111827;
+  margin: 0 0 6px 0;
+}
+
+.agreeBox {
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 20px;
+}
+
+.agreeRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 6px 0;
+  font-size: 0.9rem;
+  color: #111827;
+}
+
+.agreeRowLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.agreeRowLeft input {
+  width: 16px;
+  height: 16px;
+}
+
+.agreeText {
+  font-size: 0.9rem;
+}
+
+.agreeMore {
+  border: none;
+  background: none;
+  color: #9ca3af;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.agreeDetail {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin: 4px 0 10px 24px;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #e5e7eb;
+}
+
+.agreeDetailTitle {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin: 0 0 6px 0;
+}
+
+.agreeDetailText {
+  margin: 2px 0;
+  font-size: 0.82rem;
+  color: #4b5563;
+}
+
+.agreeBtn {
+  width: 100%;
+  margin-top: 8px;
+  padding: 14px 16px;
+  border-radius: 999px;
+  border: none;
+  background: #c9ddff;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.agreeBtn:disabled {
+  cursor: default;
+}
+
+.agreeBtnActive {
+  background: #1867c4;
 }
 
 .notFound {
