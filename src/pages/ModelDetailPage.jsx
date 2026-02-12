@@ -251,8 +251,8 @@ export default function ModelDetailPage() {
                 <div className={styles.infoCard}>
                   <span className={styles.infoIcon}><IconStore /></span>
                   <div>
-                    <p className={styles.infoTitle}>Neirin Pyonagi</p>
-                    <p className={styles.infoText}>본 상품은 Neirin Pyonagi에서 직접 판매하는 상품입니다.</p>
+                    <p className={styles.infoTitle}>내일은편하게 mobile</p>
+                    <p className={styles.infoText}>본 상품은 내일은편하게 mobile에서 직접 판매하는 상품입니다.</p>
                   </div>
                 </div>
               </div>

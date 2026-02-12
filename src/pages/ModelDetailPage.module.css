@@ -3,7 +3,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #f0f2f5;
+  background: #f8fafc;
 }
 
 .main {
@@ -19,7 +19,7 @@
 .back {
   display: inline-block;
   margin-bottom: 20px;
-  color: #1867c4;
+  color: #6366f1;
   text-decoration: none;
   font-size: 0.9rem;
 }
@@ -95,7 +95,7 @@
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  background: #f0f2f5;
+  background: #f8fafc;
   border: none;
   border-radius: 8px;
   font-size: 0.95rem;
@@ -169,7 +169,7 @@
   padding: 16px 24px;
   border: none;
   border-radius: 10px;
-  background: #1867c4;
+  background: #6366f1;
   color: #fff;
   font-size: 1.05rem;
   font-weight: 600;
@@ -178,7 +178,7 @@
 }
 
 .btnApply:hover {
-  background: #1557a8;
+  background: #4f46e5;
 }
 
 /* ===== 하단 섹션: 통신사 | 요금 상세 ===== */
@@ -247,20 +247,20 @@
 }
 
 .carrierCardActive {
-  border-color: #1867c4;
+  border-color: #6366f1;
   background: #e8f0fe;
 }
 
 .carrierCard input,
 .carrierCardActive input {
   margin: 0;
-  accent-color: #1867c4;
+  accent-color: #6366f1;
 }
 
 .carrierLogoSmall {
   width: 40px;
   height: 40px;
-  background: #f0f2f5;
+  background: #f8fafc;
   color: #555;
   font-size: 0.85rem;
   font-weight: 700;
@@ -273,7 +273,7 @@
 
 .carrierCardActive .carrierLogoSmall {
   background: #d2e3fc;
-  color: #1867c4;
+  color: #6366f1;
 }
 
 .carrierText {
@@ -303,7 +303,7 @@
   display: inline-flex;
   width: 18px;
   height: 18px;
-  background: #f0f2f5;
+  background: #f8fafc;
   color: #5f6368;
   border-radius: 50%;
   font-size: 0.75rem;
@@ -348,15 +348,15 @@
   position: absolute;
   inset: 6px;
   border-radius: 999px;
-  background: var(--swatch-color, #f0f2f5);
+  background: var(--swatch-color, #f8fafc);
 }
 
 .colorSwatch:hover {
-  border-color: #1867c4;
+  border-color: #6366f1;
 }
 
 .colorSwatchActive {
-  border-color: #1867c4;
+  border-color: #6366f1;
 }
 
 .colorSwatchSoldOut {
@@ -394,7 +394,7 @@
 }
 
 .discountCard strong {
-  color: #1867c4;
+  color: #6366f1;
   font-size: 0.95rem;
 }
 
@@ -427,13 +427,13 @@
 }
 
 .planCardActive {
-  border-color: #1867c4;
+  border-color: #6366f1;
   background: #e8f0fe;
 }
 
 .planCard input {
   margin-right: 12px;
-  accent-color: #1867c4;
+  accent-color: #6366f1;
 }
 
 .planCardContent {
@@ -456,7 +456,7 @@
   display: inline-block;
   margin-top: 8px;
   font-size: 0.85rem;
-  color: #1867c4;
+  color: #6366f1;
   text-decoration: none;
 }
 
@@ -470,7 +470,7 @@
 }
 
 .planBenefit {
-  color: #1867c4;
+  color: #6366f1;
   margin-left: 12px;
 }
 
@@ -492,14 +492,14 @@
 }
 
 .installBtn:hover {
-  border-color: #1867c4;
+  border-color: #6366f1;
   background: #f8f9fa;
 }
 
 .installBtnActive {
-  border-color: #1867c4;
+  border-color: #6366f1;
   background: #e8f0fe;
-  color: #1867c4;
+  color: #6366f1;
 }
 
 /* 탭 */
@@ -527,9 +527,9 @@
 }
 
 .tabNavActive {
-  color: #1867c4;
+  color: #6366f1;
   font-weight: 600;
-  border-bottom-color: #1867c4;
+  border-bottom-color: #6366f1;
 }
 
 .tabContent {
@@ -564,7 +564,7 @@
 .tabBadge {
   display: inline-block;
   padding: 2px 8px;
-  background: #f0f2f5;
+  background: #f8fafc;
   border-radius: 6px;
   font-size: 0.8rem;
   margin-bottom: 6px !important;
@@ -691,7 +691,7 @@
 .badge {
   display: inline-block;
   padding: 2px 8px;
-  background: #f0f2f5;
+  background: #f8fafc;
   color: #222;
   font-size: 0.8rem;
   font-weight: 500;
@@ -700,7 +700,7 @@
 }
 
 .minus {
-  color: #1867c4 !important;
+  color: #6366f1 !important;
   font-weight: 600;
 }
 
@@ -716,13 +716,13 @@
 .totalLabel {
   font-size: 0.95rem;
   font-weight: 600;
-  color: #1867c4;
+  color: #6366f1;
 }
 
 .totalValue {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #1867c4;
+  color: #6366f1;
 }
 
 .btnApplyFull {
@@ -731,7 +731,7 @@
   padding: 16px 24px;
   border: none;
   border-radius: 10px;
-  background: #1867c4;
+  background: #6366f1;
   color: #fff;
   font-size: 1.05rem;
   font-weight: 600;
@@ -740,7 +740,7 @@
 }
 
 .btnApplyFull:hover {
-  background: #1557a8;
+  background: #4f46e5;
 }
 
 .modalBackdrop {
@@ -778,7 +778,7 @@
 .modalTitle {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #111827;
+  color: #1e293b;
   margin: 6px 0 6px;
 }
 
@@ -793,7 +793,7 @@
   padding: 12px 16px;
   border-radius: 999px;
   border: none;
-  background: #1867c4;
+  background: #6366f1;
   color: #fff;
   font-size: 0.95rem;
   font-weight: 600;
@@ -802,7 +802,7 @@
 }
 
 .modalPrimary:hover {
-  background: #1557a8;
+  background: #4f46e5;
 }
 
 .modalSecondary {
@@ -832,7 +832,7 @@
 .modalColorLabel {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #111827;
+  color: #1e293b;
 }
 
 .modalColorHelp {
@@ -887,7 +887,7 @@
 .stepProgressBar {
   width: 33%;
   height: 100%;
-  background: #1867c4;
+  background: #6366f1;
 }
 
 .stepProgressBarWide {
@@ -901,7 +901,7 @@
 .stepTitle {
   font-size: 1.3rem;
   font-weight: 700;
-  color: #111827;
+  color: #1e293b;
   margin: 0 0 18px 0;
 }
 
@@ -924,14 +924,14 @@
 }
 
 .stepOptionActive {
-  border-color: #1867c4;
+  border-color: #6366f1;
   background: #e8f0fe;
 }
 
 .stepOption strong {
   display: block;
   font-size: 0.98rem;
-  color: #111827;
+  color: #1e293b;
   margin-bottom: 4px;
 }
 
@@ -973,9 +973,9 @@
 }
 
 .stepGenderActive {
-  border-color: #1867c4;
+  border-color: #6366f1;
   background: #e8f0fe;
-  color: #1867c4;
+  color: #6366f1;
 }
 
 .stepInput {
@@ -988,7 +988,7 @@
 }
 
 .stepInput:focus {
-  border-color: #1867c4;
+  border-color: #6366f1;
   box-shadow: 0 0 0 1px #d2e3fc;
 }
 
@@ -1029,7 +1029,7 @@
 }
 
 .stepNextBtnActive {
-  background: #1867c4;
+  background: #6366f1;
 }
 
 .noticeBlock {
@@ -1051,7 +1051,7 @@
   padding: 2px 10px;
   border-radius: 999px;
   background: #e8f0fe;
-  color: #1867c4;
+  color: #6366f1;
   font-size: 0.8rem;
   font-weight: 600;
 }
@@ -1059,7 +1059,7 @@
 .noticeTitle {
   margin: 0;
   font-size: 0.95rem;
-  color: #111827;
+  color: #1e293b;
   font-weight: 600;
 }
 
@@ -1086,9 +1086,9 @@
 }
 
 .noticeBtnActive {
-  border-color: #1867c4;
+  border-color: #6366f1;
   background: #e8f0fe;
-  color: #1867c4;
+  color: #6366f1;
 }
 
 .noticeAllBtn {
@@ -1097,7 +1097,7 @@
   padding: 12px 16px;
   border-radius: 999px;
   border: none;
-  background: #1867c4;
+  background: #6366f1;
   color: #fff;
   font-size: 0.95rem;
   font-weight: 600;
@@ -1120,7 +1120,7 @@
 
 .agreeValue {
   font-size: 0.95rem;
-  color: #111827;
+  color: #1e293b;
   margin: 0 0 6px 0;
 }
 
@@ -1137,7 +1137,7 @@
   justify-content: space-between;
   margin: 6px 0;
   font-size: 0.9rem;
-  color: #111827;
+  color: #1e293b;
 }
 
 .agreeRowLeft {
@@ -1203,7 +1203,7 @@
 }
 
 .agreeBtnActive {
-  background: #1867c4;
+  background: #6366f1;
 }
 
 .notFound {
@@ -1233,7 +1233,7 @@
 }
 
 .faqBtn:hover {
-  background: #f0f2f5;
+  background: #f8fafc;
   color: #222;
 }
 

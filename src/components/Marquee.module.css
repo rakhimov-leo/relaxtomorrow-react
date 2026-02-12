@@ -1,0 +1,58 @@
+.wrap {
+  overflow: hidden;
+  padding: 20px 0;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  background: #fff;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: scroll 35s linear infinite;
+}
+
+.track:hover {
+  animation-play-state: paused;
+}
+
+.item {
+  flex-shrink: 0;
+  padding: 0 28px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #64748b;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.item:hover {
+  color: #6366f1;
+}
+
+.item:nth-child(odd) {
+  color: #6366f1;
+}
+
+.item:nth-child(odd):hover {
+  color: #4f46e5;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+}

@@ -4,7 +4,7 @@
 
 .count {
   font-size: 0.9rem;
-  color: #6b7280;
+  color: #64748b;
   margin: 0 0 16px 0;
 }
 
@@ -12,4 +12,30 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 20px;
+}
+
+.grid .card {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.grid.reveal .card {
+  animation: cardReveal 0.45s ease forwards;
+  animation-delay: calc(0.05s * var(--i, 0));
+}
+
+@keyframes cardReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grid .card,
+  .grid.reveal .card {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
 }

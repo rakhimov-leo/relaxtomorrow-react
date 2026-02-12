@@ -1,0 +1,127 @@
+.hero {
+  position: relative;
+  min-height: 42vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 20px 56px;
+  overflow: hidden;
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, rgba(15, 23, 42, 0.45), rgba(15, 23, 42, 0.15)),
+    url('/images/hero-bg.png') center/cover no-repeat;
+}
+
+.glow {
+  position: absolute;
+  top: -20%;
+  right: -10%;
+  width: 60%;
+  height: 80%;
+  background: radial-gradient(ellipse, rgba(99, 102, 241, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  text-align: center;
+}
+
+.date {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin: 0 0 12px 0;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  color: #1e293b;
+  line-height: 1.25;
+  margin: 0 0 16px 0;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease 0.1s forwards;
+  transform: translateY(20px);
+}
+
+.highlight {
+  color: #6366f1;
+  display: inline-block;
+}
+
+.subtitle {
+  font-size: 1.05rem;
+  color: #64748b;
+  margin: 0 0 28px 0;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease 0.2s forwards;
+  transform: translateY(20px);
+}
+
+.searchBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 24px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+  color: #1e293b;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+  transition: box-shadow 0.25s, border-color 0.25s, transform 0.2s;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease 0.35s forwards;
+  transform: translateY(20px);
+}
+
+.searchBtn:hover {
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.15);
+  border-color: #c7d2fe;
+  transform: translateY(-2px);
+}
+
+.searchIcon {
+  font-size: 1.1rem;
+  color: #6366f1;
+}
+
+.anchor {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .date, .title, .subtitle, .searchBtn {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
