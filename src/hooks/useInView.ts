@@ -1,9 +1,14 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, RefObject } from 'react'
 
-export function useInView(options = {}) {
+interface UseInViewOptions {
+  rootMargin?: string;
+  threshold?: number;
+}
+
+export function useInView(options: UseInViewOptions = {}): [RefObject<HTMLDivElement | null>, boolean] {
   const { rootMargin = '0px 0px -40px 0px', threshold = 0.1 } = options
   const [isInView, setIsInView] = useState(false)
-  const ref = useRef(null)
+  const ref = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     const el = ref.current

@@ -1,7 +1,12 @@
 import { useState } from 'react'
 import styles from './BrandFilter.module.css'
 
-const BRANDS = {
+interface BrandFilterProps {
+  value: string | null;
+  onChange: (value: string | null) => void;
+}
+
+const BRANDS: Record<string, string[]> = {
   samsung: [
     '갤럭시 S25 5G',
     '갤럭시 S25+ 5G',
@@ -16,8 +21,8 @@ const BRANDS = {
   ],
 }
 
-export default function BrandFilter({ value, onChange }) {
-  const [activeTab, setActiveTab] = useState('samsung')
+export default function BrandFilter({ value, onChange }: BrandFilterProps) {
+  const [activeTab, setActiveTab] = useState<string>('samsung')
   const [showMore, setShowMore] = useState(false)
 
   const list = BRANDS[activeTab] || []

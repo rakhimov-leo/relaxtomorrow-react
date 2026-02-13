@@ -53,6 +53,27 @@
   margin: 8px 0 0 0;
 }
 
+.selectBtn {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px 0;
+  border-radius: 10px;
+  border: none;
+  background: #5F37E7;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.selectBtn:hover {
+  opacity: 0.9;
+}
+
 @media (max-width: 900px) {
   .panel {
     width: 100%;

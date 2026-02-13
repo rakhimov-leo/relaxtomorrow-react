@@ -1,15 +1,21 @@
+import React from 'react'
 import { Link } from 'react-router-dom'
-import { formatPrice } from '../data/deals'
+import { formatPrice, type Deal } from '../data/deals'
 import styles from './ProductCard.module.css'
 
-export default function ProductCard({ item, index = 0 }) {
+interface ProductCardProps {
+  item: Deal;
+  index?: number;
+}
+
+export default function ProductCard({ item, index = 0 }: ProductCardProps) {
   const { name, storage, carrier, carrierType, badge, priceOriginal, priceSale, slug } = item
   const detailSlug = slug || name.toLowerCase().replace(/\s+/g, '-')
   const priceText = priceSale !== undefined && priceSale !== null ? formatPrice(priceSale) : null
   const originalText = priceOriginal ? formatPrice(priceOriginal) : null
 
   return (
-    <article className={styles.card} style={{ '--i': index }}>
+    <article className={styles.card} style={{ '--i': index } as React.CSSProperties}>
       <div className={styles.top}>
         {badge && <span className={styles.badge}>{badge}</span>}
         <span className={styles.carrier}>

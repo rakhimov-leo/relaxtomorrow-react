@@ -1,6 +1,6 @@
 /**
  * Inline SVG icons — qo'shimcha fayl yuklanmaydi, juda yengil.
- * Bir xil o'lcham va uslub (yengil yuklanish + chiroyli ko‘rinish).
+ * Bir xil o'lcham va uslub (yengil yuklanish + chiroyli ko'rinish).
  */
 
 const size = 40

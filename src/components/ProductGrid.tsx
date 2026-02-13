@@ -2,16 +2,23 @@ import ProductCard from './ProductCard'
 import { DEALS } from '../data/deals'
 import styles from './ProductGrid.module.css'
 
-const CARRIER_NAMES = { skt: 'SKT', kt: 'KT', lg: 'LG', mvno: '알뜰폰' }
+interface ProductGridProps {
+  brand: string | null;
+  storage: string | null;
+  carrier: string | null;
+  revealed: boolean;
+}
+
+const CARRIER_NAMES: Record<string, string> = { skt: 'SKT', kt: 'KT', lg: 'LG', mvno: '알뜰폰' }
 
 // 기종 필터에서 선택한 모델 이름 → 삼성/애플
 // 기종 선택 시 삼성/애플로 필터 (BrandFilter와 동일한 이름)
-const BRAND_BY_MODEL = {
+const BRAND_BY_MODEL: Record<string, string> = {
   '갤럭시 S25 5G': 'samsung', '갤럭시 S25+ 5G': 'samsung', '갤럭시 S25 Ultra 5G': 'samsung', '갤럭시 S25엣지': 'samsung',
   '아이폰17': 'apple', '아이폰 17 Air': 'apple', '아이폰 17 PRO': 'apple', '아이폰 16': 'apple',
 }
 
-export default function ProductGrid({ brand, storage, carrier, revealed }) {
+export default function ProductGrid({ brand, storage, carrier, revealed }: ProductGridProps) {
   const carrierName = carrier ? CARRIER_NAMES[carrier] : null
   const brandKey = brand ? BRAND_BY_MODEL[brand] : null
 

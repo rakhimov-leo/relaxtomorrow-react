@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams, Link, useSearchParams } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -9,31 +9,66 @@ import styles from './ModelDetailPage.module.css'
 
 const PLACEHOLDER = 'https://placehold.co/400x600/e5e7eb/9ca3af?text=Phone'
 
-const CARRIER_OPTIONS = [
+interface CarrierOption {
+  id: string;
+  label: string;
+  desc: string;
+  logo: string;
+}
+
+interface ColorOption {
+  id: string;
+  name: string;
+  hex: string;
+  soldOut: boolean;
+}
+
+interface Plan {
+  id: string;
+  name: string;
+  price: string;
+  benefit: string;
+  data: string;
+  voice: string;
+  sub: string;
+}
+
+interface Tab {
+  id: string;
+  label: string;
+}
+
+interface NoticeStep {
+  id: number;
+  title: string;
+  items: string[];
+}
+
+const CARRIER_OPTIONS: CarrierOption[] = [
   { id: 'skt', label: 'SKT / 번호이동', desc: '쓰던 번호 그대로, 통신사만 변경할게요', logo: 'T' },
   { id: 'kt', label: 'KT / 기기변경', desc: '이용중인 KT통신사에서 휴대폰만 바꾸고 싶어요', logo: 'kt' },
   { id: 'lgu', label: 'LG U+ / 번호이동', desc: '쓰던 번호 그대로, 통신사만 변경할게요', logo: 'U+' },
 ]
 
-const COLOR_OPTIONS = [
+const COLOR_OPTIONS: ColorOption[] = [
   { id: 'c1', name: '블랙', hex: '#111827', soldOut: true },
   { id: 'c2', name: '화이트', hex: '#f3f4f6', soldOut: true },
   { id: 'c3', name: '라벤더', hex: '#e5e0ff', soldOut: true },
   { id: 'c4', name: '그레이', hex: '#d1d5db', soldOut: true },
   { id: 'c5', name: '네이비', hex: '#0f172a', soldOut: false },
 ]
-const PLANS = [
+const PLANS: Plan[] = [
   { id: 'super', name: '5G 프리미어 슈퍼', price: '115,000', benefit: '1,040,000원', data: '데이터 무제한', voice: '통화 무제한, 문자 무제한', sub: '부가통화 300분' },
   { id: 'regular', name: '5G 프리미어 레귤러', price: '95,000', benefit: '940,000원', data: '데이터 무제한', voice: '통화 무제한, 문자 무제한', sub: '부가통화 300분' },
 ]
-const TABS = [
+const TABS: Tab[] = [
   { id: 'plan', label: '요금제' },
   { id: 'contract', label: '약정안내' },
   { id: 'read', label: '필독사항' },
   { id: 'delivery', label: '개통방법' },
 ]
 
-const SERVICE_TERMS_TEXT = [
+const SERVICE_TERMS_TEXT: string[] = [
   '본 (필수) 비회원 서비스 이용약관은 내일은편하게 서비스 이용과 관련하여 적용돼요.',
   '',
   '제1조 (신청 전 유의사항)',
@@ -57,10 +92,10 @@ const SERVICE_TERMS_TEXT = [
   '서비스 이용약관 시행일자: 2026년 1월 22일 / 변경일자: 2026년 1월 15일',
 ]
 
-const PRIVACY_TERMS_TEXT = [
+const PRIVACY_TERMS_TEXT: string[] = [
   '㈜내일은편하게모바일 개인정보 제3자 제공 및 활용에 대한 동의',
   '',
-  '주식회사 내일은편하게모바일(이하 “회사”라 합니다)은 고객에게 사전 동의를 받은 범위 내에서만 개인정보를 제3자에게 제공합니다.',
+  '주식회사 내일은편하게모바일(이하 "회사"라 합니다)은 고객에게 사전 동의를 받은 범위 내에서만 개인정보를 제3자에게 제공합니다.',
   '단, 「개인정보 보호법」 제17조 및 제18조에 따라 법령에 근거가 있거나 그에 준하는 정당한 사유가 있는 경우에는 고객의 동의 없이도 제3자에게 제공할 수 있습니다.',
   '향후 개인정보를 제공받는 제3자와의 신규 계약 체결, 계약 해지 또는 기타 계약 내용의 변경이 있을 수 있으며, 이 경우 개인정보처리방침을 통해 사전에 고지합니다.',
   '',
@@ -88,7 +123,7 @@ const PRIVACY_TERMS_TEXT = [
   '• 보유 및 이용기간: 업무 완료 시 지체 없이 파기',
 ]
 
-const NOTICE_STEPS = [
+const NOTICE_STEPS: NoticeStep[] = [
   {
     id: 1,
     title: '요금제 유지기간을 확인해주세요. 유지기간 내 요금제를 변경하면 위약금이 발생해요.',
@@ -136,19 +171,21 @@ const NOTICE_STEPS = [
   },
 ]
 
+type StepParam = 'owner' | 'identity' | 'notice' | 'agreement' | 'ars'
+
 export default function ModelDetailPage() {
-  const { slug } = useParams()
-  const model = getModelBySlug(slug)
+  const { slug } = useParams<{ slug: string }>()
+  const model = getModelBySlug(slug || '')
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const [carrier, setCarrier] = useState('lgu')
-  const [color, setColor] = useState(null)
-  const [plan, setPlan] = useState('super')
-  const [installment, setInstallment] = useState('24')
-  const [activeTab, setActiveTab] = useState('plan')
-  const [modalStep, setModalStep] = useState(null) // null | 'auth' | 'color'
-  const [ownerType, setOwnerType] = useState(null) // null | 'self' | 'family'
-  const [gender, setGender] = useState('male') // 'male' | 'female'
+  const [carrier, setCarrier] = useState<string>('lgu')
+  const [color, setColor] = useState<string | null>(null)
+  const [plan, setPlan] = useState<string>('super')
+  const [installment, setInstallment] = useState<string>('24')
+  const [activeTab, setActiveTab] = useState<string>('plan')
+  const [modalStep, setModalStep] = useState<string | null>(null) // null | 'auth' | 'color'
+  const [ownerType, setOwnerType] = useState<string | null>(null) // null | 'self' | 'family'
+  const [gender, setGender] = useState<string | null>(null) // null | 'male' | 'female'
   const [birthYear, setBirthYear] = useState('')
   const [birthMonth, setBirthMonth] = useState('')
   const [birthDay, setBirthDay] = useState('')
@@ -163,7 +200,7 @@ export default function ModelDetailPage() {
     stepParam === 'agreement' ? 4 :
     stepParam === 'ars' ? 5 : 0
 
-  const goToStep = (step) => {
+  const goToStep = (step: StepParam | null) => {
     const next = new URLSearchParams(searchParams)
     if (!step) {
       next.delete('step')
@@ -177,7 +214,7 @@ export default function ModelDetailPage() {
 
   const selectedColor = COLOR_OPTIONS.find((c) => c.id === color)
   const [showLoginModal, setShowLoginModal] = useState(false)
-  const [noticeChecked, setNoticeChecked] = useState(
+  const [noticeChecked, setNoticeChecked] = useState<boolean[]>(
     () => NOTICE_STEPS.map(() => false),
   )
   const allNoticesChecked = noticeChecked.every(Boolean)
@@ -186,13 +223,13 @@ export default function ModelDetailPage() {
   const [agreePrivacy, setAgreePrivacy] = useState(false)
   const [showServiceTerms, setShowServiceTerms] = useState(false)
   const [showPrivacyTerms, setShowPrivacyTerms] = useState(false)
-  const [arsId, setArsId] = useState(null)
+  const [arsId, setArsId] = useState<string | null>(null)
   const [arsCode, setArsCode] = useState('')
   const [arsPhone, setArsPhone] = useState('010-8477-9503')
   const [arsTimer, setArsTimer] = useState(180)
   const [arsLoading, setArsLoading] = useState(false)
   const [arsError, setArsError] = useState('')
-  const arsIntervalRef = useRef(null)
+  const arsIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const startArsTimer = useCallback(async () => {
     setArsLoading(true)
@@ -203,13 +240,13 @@ export default function ModelDetailPage() {
       setArsCode(result.arsCode)
       setArsPhone(result.arsPhone.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'))
       setArsTimer(result.expiresInSeconds)
-    } catch (err) {
+    } catch (err: unknown) {
       // Backend ulana olmasa, demo rejimda ishlaydi
       const code = String(Math.floor(100000 + Math.random() * 900000))
       setArsCode(code)
       setArsTimer(180)
       setArsId(null)
-      console.log('ARS API mavjud emas, demo rejim:', err.message)
+      console.log('ARS API mavjud emas, demo rejim:', err instanceof Error ? err.message : err)
     }
     setArsLoading(false)
 
@@ -217,7 +254,7 @@ export default function ModelDetailPage() {
     arsIntervalRef.current = setInterval(() => {
       setArsTimer((prev) => {
         if (prev <= 1) {
-          clearInterval(arsIntervalRef.current)
+          clearInterval(arsIntervalRef.current!)
           return 0
         }
         return prev - 1
@@ -261,7 +298,7 @@ export default function ModelDetailPage() {
                   src={model.image}
                   alt={model.name}
                   className={styles.productImage}
-                  onError={(e) => { e.target.src = PLACEHOLDER }}
+                  onError={(e: React.SyntheticEvent<HTMLImageElement>) => { e.currentTarget.src = PLACEHOLDER }}
                 />
               </div>
             </div>
@@ -345,7 +382,7 @@ export default function ModelDetailPage() {
                           ? styles.colorSwatchActive
                           : styles.colorSwatch
                       }
-                      style={{ '--swatch-color': c.hex }}
+                      style={{ '--swatch-color': c.hex } as React.CSSProperties}
                       onClick={() => !c.soldOut && setColor(c.id)}
                     >
                       {c.soldOut ? '품절' : ''}
@@ -462,17 +499,6 @@ export default function ModelDetailPage() {
                 </div>
               )}
 
-              <h2 className={styles.sectionTitle} id="reviews">구매후기</h2>
-              <div className={styles.reviewList}>
-                <div className={styles.reviewCard}>
-                  <p className={styles.reviewTitle}>상담 없이도 쉽게 가입 완료!</p>
-                  <p className={styles.reviewText}>가입 혜택이 정말 다양해서 망설임 없이 선택했어요. 별다른 복잡한 과정 없이 앱에서 바로 신청하고, 당일에 개통까지 되어 완전히 만족합니다.</p>
-                </div>
-                <div className={styles.reviewCard}>
-                  <p className={styles.reviewTitle}>내가 고른 요금제로 당일에 바로 개통!</p>
-                  <p className={styles.reviewText}>영업 전화나 추가 상담 없이, 내가 원하는 요금제만 골라서 한 번에 처리됐어요. 당일에 바로 개통되어 생각보다 훨씬 쉽게 서비스를 이용할 수 있었습니다.</p>
-                </div>
-              </div>
             </div>
             <div className={styles.rightCol}>
               <h3 className={styles.summaryCardTitle}>{model.name}</h3>
@@ -555,7 +581,7 @@ export default function ModelDetailPage() {
         >
           <div
             className={styles.modal}
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e: React.MouseEvent) => e.stopPropagation()}
           >
             <button
               type="button"
@@ -575,7 +601,7 @@ export default function ModelDetailPage() {
                   type="button"
                   className={styles.modalPrimary}
                   onClick={() => {
-                    // keyin /login routenga navigate qilishni oson qo‘shamiz
+                    // keyin /login routenga navigate qilishni oson qo'shamiz
                     setModalStep('color')
                   }}
                 >
@@ -613,7 +639,7 @@ export default function ModelDetailPage() {
                             ? styles.colorSwatchActive
                             : styles.colorSwatch
                         }
-                        style={{ '--swatch-color': c.hex }}
+                        style={{ '--swatch-color': c.hex } as React.CSSProperties}
                         onClick={() => !c.soldOut && setColor(c.id)}
                       >
                         {c.soldOut ? '품절' : ''}
@@ -623,7 +649,7 @@ export default function ModelDetailPage() {
                 </div>
                 <p className={styles.modalSelectedText}>
                   {selectedColor
-                    ? `${selectedColor.name} 색상을 선택했어요.`
+                    ? `${selectedColor?.name} 색상을 선택했어요.`
                     : '색상을 선택해주세요.'}
                 </p>
                 <button
@@ -646,6 +672,7 @@ export default function ModelDetailPage() {
 
       {wizardStep === 1 && (
         <div className={styles.stepOverlay}>
+          <button type="button" className={styles.stepCloseBtn} onClick={() => goToStep(null)}>✕</button>
           <div className={styles.stepCard}>
             <div className={styles.stepper}>
               <div className={styles.stepperItem}><span className={styles.stepperCurrent}>1</span></div>
@@ -691,6 +718,7 @@ export default function ModelDetailPage() {
 
       {wizardStep === 2 && (
         <div className={styles.stepOverlay}>
+          <button type="button" className={styles.stepCloseBtn} onClick={() => goToStep(null)}>✕</button>
           <div className={styles.stepCard}>
             <div className={styles.stepper}>
               <div className={styles.stepperItem}><span className={styles.stepperDone}>✓</span></div>
@@ -734,7 +762,7 @@ export default function ModelDetailPage() {
                   className={`${styles.stepInput} ${styles.stepInputYear}`}
                   maxLength={4}
                   value={birthYear}
-                  onChange={(e) => {
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     const digits = e.target.value.replace(/\D/g, '').slice(0, 4)
                     if (digits.length === 4) {
                       const y = parseInt(digits, 10)
@@ -750,7 +778,7 @@ export default function ModelDetailPage() {
                   className={`${styles.stepInput} ${styles.stepInputMD}`}
                   maxLength={2}
                   value={birthMonth}
-                  onChange={(e) => {
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     const digits = e.target.value.replace(/\D/g, '').slice(0, 2)
                     if (digits.length === 2) {
                       const m = parseInt(digits, 10)
@@ -766,7 +794,7 @@ export default function ModelDetailPage() {
                   className={`${styles.stepInput} ${styles.stepInputMD}`}
                   maxLength={2}
                   value={birthDay}
-                  onChange={(e) => {
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     const digits = e.target.value.replace(/\D/g, '').slice(0, 2)
                     if (digits.length === 2) {
                       const d = parseInt(digits, 10)
@@ -797,7 +825,7 @@ export default function ModelDetailPage() {
                   className={`${styles.stepInput} ${styles.stepInputSmall}`}
                   value={phoneMid}
                   maxLength={4}
-                  onChange={(e) => {
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     const digits = e.target.value.replace(/\D/g, '').slice(0, 4)
                     setPhoneMid(digits)
                   }}
@@ -813,10 +841,10 @@ export default function ModelDetailPage() {
               </div>
             </div>
 
-            {/** Next button faolligi: o‘rtadagi 4 ta raqam to‘liq bo‘lsa */}
+            {/** Next button faolligi: o'rtadagi 4 ta raqam to'liq bo'lsa */}
             {(() => {
               const onlyDigits = /^\d{4}$/.test(phoneMid)
-              const enabled = onlyDigits && birthFull
+              const enabled = onlyDigits && birthFull && !!gender
               return (
                 <button
                   type="button"
@@ -834,6 +862,7 @@ export default function ModelDetailPage() {
 
       {wizardStep === 3 && (
         <div className={styles.stepOverlay}>
+          <button type="button" className={styles.stepCloseBtn} onClick={() => goToStep(null)}>✕</button>
           <div className={styles.stepCard}>
             <div className={styles.stepper}>
               <div className={styles.stepperItem}><span className={styles.stepperDone}>✓</span></div>
@@ -851,7 +880,6 @@ export default function ModelDetailPage() {
             {NOTICE_STEPS.map((n, idx) => (
               <div key={n.id} className={styles.noticeBlock}>
                 <div className={styles.noticeHeader}>
-                  <span className={styles.noticeBadge}>{idx + 1}/6</span>
                   <p className={styles.noticeTitle}>{n.title}</p>
                 </div>
                 {n.items.length > 0 && (
@@ -861,19 +889,21 @@ export default function ModelDetailPage() {
                     ))}
                   </ul>
                 )}
-                <button
-                  type="button"
-                  className={`${styles.noticeBtn} ${noticeChecked[idx] ? styles.noticeBtnActive : ''}`}
-                  onClick={() =>
-                    setNoticeChecked((prev) => {
-                      const copy = [...prev]
-                      copy[idx] = !copy[idx]
-                      return copy
-                    })
-                  }
-                >
-                  {noticeChecked[idx] ? '확인했어요' : '확인'}
-                </button>
+                <label className={styles.noticeCheckLabel}>
+                  <input
+                    type="checkbox"
+                    checked={noticeChecked[idx]}
+                    onChange={() =>
+                      setNoticeChecked((prev) => {
+                        const copy = [...prev]
+                        copy[idx] = !copy[idx]
+                        return copy
+                      })
+                    }
+                    className={styles.noticeCheckbox}
+                  />
+                  <span className={styles.noticeCheckText}>확인했어요</span>
+                </label>
               </div>
             ))}
 
@@ -896,6 +926,7 @@ export default function ModelDetailPage() {
 
       {wizardStep === 4 && (
         <div className={styles.stepOverlay}>
+          <button type="button" className={styles.stepCloseBtn} onClick={() => goToStep(null)}>✕</button>
           <div className={styles.stepCard}>
             <div className={styles.stepper}>
               <div className={styles.stepperItem}><span className={styles.stepperDone}>✓</span></div>
@@ -927,7 +958,7 @@ export default function ModelDetailPage() {
                   <input
                     type="checkbox"
                     checked={agreeAll}
-                    onChange={(e) => {
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       const checked = e.target.checked
                       setAgreeAll(checked)
                       setAgreeService(checked)
@@ -942,7 +973,7 @@ export default function ModelDetailPage() {
                   <input
                     type="checkbox"
                     checked={agreeService}
-                    onChange={(e) => {
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       const checked = e.target.checked
                       setAgreeService(checked)
                       setAgreeAll(checked && agreePrivacy)
@@ -953,7 +984,7 @@ export default function ModelDetailPage() {
                 <button
                   type="button"
                   className={`${styles.agreeMore} ${showServiceTerms ? styles.agreeMoreOpen : ''}`}
-                  onClick={(e) => {
+                  onClick={(e: React.MouseEvent) => {
                     e.preventDefault()
                     e.stopPropagation()
                     setShowServiceTerms((prev) => !prev)
@@ -977,7 +1008,7 @@ export default function ModelDetailPage() {
                   <input
                     type="checkbox"
                     checked={agreePrivacy}
-                    onChange={(e) => {
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       const checked = e.target.checked
                       setAgreePrivacy(checked)
                       setAgreeAll(checked && agreeService)
@@ -988,7 +1019,7 @@ export default function ModelDetailPage() {
                 <button
                   type="button"
                   className={`${styles.agreeMore} ${showPrivacyTerms ? styles.agreeMoreOpen : ''}`}
-                  onClick={(e) => {
+                  onClick={(e: React.MouseEvent) => {
                     e.preventDefault()
                     e.stopPropagation()
                     setShowPrivacyTerms((prev) => !prev)
@@ -1023,6 +1054,7 @@ export default function ModelDetailPage() {
 
       {wizardStep === 5 && (
         <div className={styles.stepOverlay}>
+          <button type="button" className={styles.stepCloseBtn} onClick={() => goToStep(null)}>✕</button>
           <div className={styles.stepCard}>
             <div className={styles.stepper}>
               <div className={styles.stepperItem}><span className={styles.stepperDone}>✓</span></div>
@@ -1035,55 +1067,71 @@ export default function ModelDetailPage() {
               <div className={styles.stepperLine + ' ' + styles.stepperLineDone} />
               <div className={styles.stepperItem}><span className={styles.stepperCurrent}>5</span></div>
             </div>
-            <h2 className={styles.stepTitle}>ARS 전화 인증하기</h2>
-            {arsLoading ? (
-              <p className={styles.arsDesc}>코드를 생성하고 있습니다...</p>
+            {arsTimer <= 0 && !arsLoading ? (
+              <>
+                <h2 className={styles.stepTitle}>인증번호가 만료되었어요</h2>
+                <p className={styles.arsExpiredDesc}>인증번호를 재발급 받은 후</p>
+                <p className={styles.arsExpiredDesc}>ARS 인증을 진행해주세요.</p>
+                <button
+                  type="button"
+                  className={styles.arsReissueBtn}
+                  onClick={() => startArsTimer()}
+                >
+                  ↻ 인증번호 재발급
+                </button>
+              </>
             ) : (
               <>
-                <p className={styles.arsDesc}>{arsPhone}로 전화를 걸어 ARS 인증을 진행해주세요.</p>
-                <a href={`tel:${arsPhone.replace(/-/g, '')}`} className={styles.arsPhone}>
-                  <span className={styles.arsPhoneIcon}>📞</span>
-                  {arsPhone}
-                </a>
-                <div className={styles.arsCodeRow}>
-                  {arsCode.split('').map((digit, i) => (
-                    <span key={i} className={styles.arsCodeDigit}>{digit}</span>
-                  ))}
-                </div>
-                <p className={styles.arsTimerText}>
-                  {String(Math.floor(arsTimer / 60)).padStart(2, '0')}:{String(arsTimer % 60).padStart(2, '0')}
-                </p>
-                {arsError && <p className={styles.arsError}>{arsError}</p>}
-              </>
-            )}
-            <div style={{ flex: 1 }} />
-            <button
-              type="button"
-              className={`${styles.stepNextBtn} ${styles.stepNextBtnActive}`}
-              onClick={async () => {
-                if (arsId) {
-                  try {
-                    const result = await apiVerifyArsCode(arsId, arsCode)
-                    if (result.verified) {
+                <h2 className={styles.stepTitle}>ARS 전화 인증하기</h2>
+                {arsLoading ? (
+                  <p className={styles.arsDesc}>코드를 생성하고 있습니다...</p>
+                ) : (
+                  <>
+                    <p className={styles.arsDesc}>{arsPhone}로 전화를 걸어 ARS 인증을 진행해주세요.</p>
+                    <a href={`tel:${arsPhone.replace(/-/g, '')}`} className={styles.arsPhone}>
+                      <span className={styles.arsPhoneIcon}>📞</span>
+                      {arsPhone}
+                    </a>
+                    <div className={styles.arsCodeRow}>
+                      {arsCode.split('').map((digit, i) => (
+                        <span key={i} className={styles.arsCodeDigit}>{digit}</span>
+                      ))}
+                    </div>
+                    <p className={styles.arsTimerText}>
+                      {String(Math.floor(arsTimer / 60)).padStart(2, '0')}:{String(arsTimer % 60).padStart(2, '0')}
+                    </p>
+                    {arsError && <p className={styles.arsError}>{arsError}</p>}
+                  </>
+                )}
+                <div style={{ flex: 1 }} />
+                <button
+                  type="button"
+                  className={`${styles.stepNextBtn} ${styles.stepNextBtnActive}`}
+                  onClick={async () => {
+                    if (arsId) {
+                      try {
+                        const result = await apiVerifyArsCode(arsId, arsCode)
+                        if (result.verified) {
+                          if (arsIntervalRef.current) clearInterval(arsIntervalRef.current)
+                          goToStep(null)
+                          alert('전화 인증이 완료되었습니다!')
+                        } else {
+                          setArsError(result.message || '인증에 실패했습니다.')
+                        }
+                      } catch {
+                        setArsError('서버 연결에 실패했습니다.')
+                      }
+                    } else {
                       if (arsIntervalRef.current) clearInterval(arsIntervalRef.current)
                       goToStep(null)
                       alert('전화 인증이 완료되었습니다!')
-                    } else {
-                      setArsError(result.message || '인증에 실패했습니다.')
                     }
-                  } catch (err) {
-                    setArsError('서버 연결에 실패했습니다.')
-                  }
-                } else {
-                  // Demo rejim (backend yo'q)
-                  if (arsIntervalRef.current) clearInterval(arsIntervalRef.current)
-                  goToStep(null)
-                  alert('전화 인증이 완료되었습니다!')
-                }
-              }}
-            >
-              전화 인증을 완료했어요
-            </button>
+                  }}
+                >
+                  전화 인증을 완료했어요
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}

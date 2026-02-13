@@ -1,5 +1,18 @@
+export interface Deal {
+  id: string;
+  name: string;
+  slug: string;
+  storage: string;
+  carrier: string;
+  carrierType: string;
+  badge: string | null;
+  priceOriginal: number;
+  priceSale: number;
+  brand: string;
+}
+
 // km-phone.com 스타일 데모 데이터 (국민폰 참고)
-export const DEALS = [
+export const DEALS: Deal[] = [
   { id: '1', name: '갤럭시 S25 5G', slug: 'galaxy-s25-5g', storage: '256GB', carrier: 'SKT', carrierType: '이동', badge: '⭐0원-종료임박', priceOriginal: 1155000, priceSale: 0, brand: 'samsung' },
   { id: '2', name: '아이폰 17', slug: 'iphone-17', storage: '256GB', carrier: 'KT', carrierType: '이동', badge: '⭐미친할인', priceOriginal: 1287000, priceSale: 117000, brand: 'apple' },
   { id: '3', name: '갤럭시 Z플립7', slug: 'galaxy-s25-5g', storage: '256GB', carrier: 'SKT', carrierType: '이동', badge: '⭐국민지원금', priceOriginal: 1485000, priceSale: 65000, brand: 'samsung' },
@@ -22,7 +35,7 @@ export const DEALS = [
   { id: '20', name: '아이폰 16', slug: 'iphone-16', storage: '128GB', carrier: 'KT', carrierType: '기기변경', badge: '오늘끝딜', priceOriginal: 1243000, priceSale: 33000, brand: 'apple' },
 ]
 
-function formatPrice(won) {
+function formatPrice(won: number): string {
   if (won === 0) return '0원'
   return `${won.toLocaleString('ko-KR')}원`
 }
@@ -30,14 +43,14 @@ function formatPrice(won) {
 export { formatPrice }
 
 // 가장 많이 본 기기 (order: deal ids)
-export const MOST_VIEWED_IDS = ['1', '2', '4', '8', '5', '3']
+export const MOST_VIEWED_IDS: string[] = ['1', '2', '4', '8', '5', '3']
 // 많이 팔린 폰 (best selling)
-export const BEST_SELLING_IDS = ['1', '4', '2', '9', '6', '10']
+export const BEST_SELLING_IDS: string[] = ['1', '4', '2', '9', '6', '10']
 
-export function getMostViewed() {
-  return MOST_VIEWED_IDS.map((id) => DEALS.find((d) => d.id === id)).filter(Boolean)
+export function getMostViewed(): Deal[] {
+  return MOST_VIEWED_IDS.map((id) => DEALS.find((d) => d.id === id)).filter((d): d is Deal => Boolean(d))
 }
 
-export function getBestSelling() {
-  return BEST_SELLING_IDS.map((id) => DEALS.find((d) => d.id === id)).filter(Boolean)
+export function getBestSelling(): Deal[] {
+  return BEST_SELLING_IDS.map((id) => DEALS.find((d) => d.id === id)).filter((d): d is Deal => Boolean(d))
 }

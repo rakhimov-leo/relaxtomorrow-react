@@ -65,6 +65,43 @@
   transform: translateY(0);
 }
 
+.selectBtn {
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+  padding: 14px 0;
+  border-radius: 10px;
+  border: none;
+  background: #5F37E7;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.selectBtn:hover {
+  opacity: 0.9;
+}
+
+.selectBtnDisabled {
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+  padding: 14px 0;
+  border-radius: 10px;
+  border: none;
+  background: #e5e7eb;
+  color: #9ca3af;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  cursor: default;
+}
+
 @media (max-width: 900px) {
   .contentRow {
     flex-direction: column;

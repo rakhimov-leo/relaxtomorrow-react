@@ -1,4 +1,10 @@
-export const MODEL_LIST = [
+export interface PhoneModel {
+  name: string;
+  slug: string;
+  image: string;
+}
+
+export const MODEL_LIST: PhoneModel[] = [
   { name: '갤럭시 S25 5G', slug: 'galaxy-s25-5g', image: '/images/models/galaxy-s25-5g.png' },
   { name: '갤럭시 S25+ 5G', slug: 'galaxy-s25-plus-5g', image: '/images/models/galaxy-s25-plus-5g.png' },
   { name: '갤럭시 S25 Ultra 5G', slug: 'galaxy-s25-ultra-5g', image: '/images/models/galaxy-s25-ultra-5g.png' },
@@ -9,6 +15,6 @@ export const MODEL_LIST = [
   { name: '아이폰 16', slug: 'iphone-16', image: '/images/models/iphone-16.png' },
 ]
 
-export const getModelBySlug = (slug) => MODEL_LIST.find((m) => m.slug === slug)
-export const getModelByName = (name) => MODEL_LIST.find((m) => m.name === name)
-export const getSlugByName = (name) => getModelByName(name)?.slug
+export const getModelBySlug = (slug: string): PhoneModel | undefined => MODEL_LIST.find((m) => m.slug === slug)
+export const getModelByName = (name: string): PhoneModel | undefined => MODEL_LIST.find((m) => m.name === name)
+export const getSlugByName = (name: string): string | undefined => getModelByName(name)?.slug

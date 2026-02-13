@@ -1,7 +1,12 @@
 import { Link } from 'react-router-dom'
 import styles from './Marquee.module.css'
 
-const ITEMS = [
+interface MarqueeItem {
+  label: string;
+  to: string;
+}
+
+const ITEMS: MarqueeItem[] = [
   { label: '갤럭시 S25', to: '/model/galaxy-s25-5g' },
   { label: '아이폰 17', to: '/model/iphone-17' },
   { label: '갤럭시 Z플립7', to: '/model/galaxy-zflip7' },

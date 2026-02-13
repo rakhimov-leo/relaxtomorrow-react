@@ -1,8 +1,13 @@
 import { Link } from 'react-router-dom'
-import { formatPrice } from '../data/deals'
+import { formatPrice, type Deal } from '../data/deals'
 import styles from './SpotlightSection.module.css'
 
-export default function SpotlightSection({ title, items }) {
+interface SpotlightSectionProps {
+  title: string;
+  items: Deal[];
+}
+
+export default function SpotlightSection({ title, items }: SpotlightSectionProps) {
   if (!items?.length) return null
 
   return (

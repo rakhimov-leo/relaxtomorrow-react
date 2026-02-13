@@ -1,8 +1,13 @@
 import styles from './StorageFilter.module.css'
 
-const OPTIONS = ['16GB', '32GB', '64GB', '128GB', '256GB', '512GB', '1TB']
+interface StorageFilterProps {
+  value: string | null;
+  onChange: (value: string | null) => void;
+}
 
-export default function StorageFilter({ value, onChange }) {
+const OPTIONS: string[] = ['16GB', '32GB', '64GB', '128GB', '256GB', '512GB', '1TB']
+
+export default function StorageFilter({ value, onChange }: StorageFilterProps) {
   return (
     <div className={styles.wrap}>
       <h3 className={styles.label}>용량</h3>
