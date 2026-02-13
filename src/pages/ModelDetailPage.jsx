@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams, Link, useSearchParams } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { getModelBySlug } from '../data/models'
+import { generateArsCode as apiGenerateArsCode, verifyArsCode as apiVerifyArsCode } from '../libs/api'
 import { IconSelfSignup, IconHourglass, IconStore } from '../components/InfoCardIcons'
 import styles from './ModelDetailPage.module.css'
 
@@ -33,7 +34,7 @@ const TABS = [
 ]
 
 const SERVICE_TERMS_TEXT = [
-  '본 (필수) 비회원 서비스 이용약관은 RelaxTomorrow 서비스 이용과 관련하여 적용돼요.',
+  '본 (필수) 비회원 서비스 이용약관은 내일은편하게 서비스 이용과 관련하여 적용돼요.',
   '',
   '제1조 (신청 전 유의사항)',
   '1. 개통 후 단순변심(디자인, 색상 등)으로 인한 취소는 불가합니다.',
@@ -57,9 +58,9 @@ const SERVICE_TERMS_TEXT = [
 ]
 
 const PRIVACY_TERMS_TEXT = [
-  '㈜RelaxTomorrow모바일 개인정보 제3자 제공 및 활용에 대한 동의',
+  '㈜내일은편하게모바일 개인정보 제3자 제공 및 활용에 대한 동의',
   '',
-  '주식회사 RelaxTomorrow모바일(이하 “회사”라 합니다)은 고객에게 사전 동의를 받은 범위 내에서만 개인정보를 제3자에게 제공합니다.',
+  '주식회사 내일은편하게모바일(이하 “회사”라 합니다)은 고객에게 사전 동의를 받은 범위 내에서만 개인정보를 제3자에게 제공합니다.',
   '단, 「개인정보 보호법」 제17조 및 제18조에 따라 법령에 근거가 있거나 그에 준하는 정당한 사유가 있는 경우에는 고객의 동의 없이도 제3자에게 제공할 수 있습니다.',
   '향후 개인정보를 제공받는 제3자와의 신규 계약 체결, 계약 해지 또는 기타 계약 내용의 변경이 있을 수 있으며, 이 경우 개인정보처리방침을 통해 사전에 고지합니다.',
   '',
@@ -146,18 +147,21 @@ export default function ModelDetailPage() {
   const [installment, setInstallment] = useState('24')
   const [activeTab, setActiveTab] = useState('plan')
   const [modalStep, setModalStep] = useState(null) // null | 'auth' | 'color'
-  const [ownerType, setOwnerType] = useState('self') // 'self' | 'family'
+  const [ownerType, setOwnerType] = useState(null) // null | 'self' | 'family'
   const [gender, setGender] = useState('male') // 'male' | 'female'
-  const [birth, setBirth] = useState('')
+  const [birthYear, setBirthYear] = useState('')
+  const [birthMonth, setBirthMonth] = useState('')
+  const [birthDay, setBirthDay] = useState('')
   const [phoneMid, setPhoneMid] = useState('')
   const [phoneLast, setPhoneLast] = useState('')
 
-  const stepParam = searchParams.get('step') // null | 'owner' | 'identity' | 'notice' | 'agreement'
+  const stepParam = searchParams.get('step') // null | 'owner' | 'identity' | 'notice' | 'agreement' | 'ars'
   const wizardStep =
     stepParam === 'owner' ? 1 :
     stepParam === 'identity' ? 2 :
     stepParam === 'notice' ? 3 :
-    stepParam === 'agreement' ? 4 : 0
+    stepParam === 'agreement' ? 4 :
+    stepParam === 'ars' ? 5 : 0
 
   const goToStep = (step) => {
     const next = new URLSearchParams(searchParams)
@@ -169,12 +173,7 @@ export default function ModelDetailPage() {
     setSearchParams(next)
   }
 
-  const formatBirth = (digits) => {
-    if (!digits) return ''
-    if (digits.length <= 4) return digits
-    if (digits.length <= 6) return `${digits.slice(0, 4)}-${digits.slice(4)}`
-    return `${digits.slice(0, 4)}-${digits.slice(4, 6)}-${digits.slice(6, 8)}`
-  }
+  const birthFull = birthYear.length === 4 && birthMonth.length === 2 && birthDay.length === 2
 
   const selectedColor = COLOR_OPTIONS.find((c) => c.id === color)
   const [showLoginModal, setShowLoginModal] = useState(false)
@@ -187,6 +186,49 @@ export default function ModelDetailPage() {
   const [agreePrivacy, setAgreePrivacy] = useState(false)
   const [showServiceTerms, setShowServiceTerms] = useState(false)
   const [showPrivacyTerms, setShowPrivacyTerms] = useState(false)
+  const [arsId, setArsId] = useState(null)
+  const [arsCode, setArsCode] = useState('')
+  const [arsPhone, setArsPhone] = useState('010-8477-9503')
+  const [arsTimer, setArsTimer] = useState(180)
+  const [arsLoading, setArsLoading] = useState(false)
+  const [arsError, setArsError] = useState('')
+  const arsIntervalRef = useRef(null)
+
+  const startArsTimer = useCallback(async () => {
+    setArsLoading(true)
+    setArsError('')
+    try {
+      const result = await apiGenerateArsCode('01084779503')
+      setArsId(result.arsId)
+      setArsCode(result.arsCode)
+      setArsPhone(result.arsPhone.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'))
+      setArsTimer(result.expiresInSeconds)
+    } catch (err) {
+      // Backend ulana olmasa, demo rejimda ishlaydi
+      const code = String(Math.floor(100000 + Math.random() * 900000))
+      setArsCode(code)
+      setArsTimer(180)
+      setArsId(null)
+      console.log('ARS API mavjud emas, demo rejim:', err.message)
+    }
+    setArsLoading(false)
+
+    if (arsIntervalRef.current) clearInterval(arsIntervalRef.current)
+    arsIntervalRef.current = setInterval(() => {
+      setArsTimer((prev) => {
+        if (prev <= 1) {
+          clearInterval(arsIntervalRef.current)
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+  }, [])
+
+  useEffect(() => {
+    if (wizardStep === 5) startArsTimer()
+    return () => { if (arsIntervalRef.current) clearInterval(arsIntervalRef.current) }
+  }, [wizardStep, startArsTimer])
 
   if (!model) {
     return (
@@ -259,7 +301,7 @@ export default function ModelDetailPage() {
               <button
                 type="button"
                 className={styles.btnApply}
-                onClick={() => setModalStep('auth')}
+                onClick={() => goToStep('owner')}
               >
                 신청하기
               </button>
@@ -496,7 +538,7 @@ export default function ModelDetailPage() {
               <button
                 type="button"
                 className={styles.btnApplyFull}
-                onClick={() => setModalStep('auth')}
+                onClick={() => goToStep('owner')}
               >
                 신청하기
               </button>
@@ -506,7 +548,7 @@ export default function ModelDetailPage() {
       </main>
       <Footer />
 
-      {modalStep && (
+      {false && modalStep && (
         <div
           className={styles.modalBackdrop}
           onClick={() => setModalStep(null)}
@@ -605,18 +647,23 @@ export default function ModelDetailPage() {
       {wizardStep === 1 && (
         <div className={styles.stepOverlay}>
           <div className={styles.stepCard}>
-            <div className={styles.stepProgress}>
-              <div className={styles.stepProgressBar} />
+            <div className={styles.stepper}>
+              <div className={styles.stepperItem}><span className={styles.stepperCurrent}>1</span></div>
+              <div className={styles.stepperLine} />
+              <div className={styles.stepperItem}><span className={styles.stepperNum}>2</span></div>
+              <div className={styles.stepperLine} />
+              <div className={styles.stepperItem}><span className={styles.stepperNum}>3</span></div>
+              <div className={styles.stepperLine} />
+              <div className={styles.stepperItem}><span className={styles.stepperNum}>4</span></div>
+              <div className={styles.stepperLine} />
+              <div className={styles.stepperItem}><span className={styles.stepperNum}>5</span></div>
             </div>
             <h2 className={styles.stepTitle}>본인명의 휴대폰을 개통하시나요?</h2>
             <div className={styles.stepOptions}>
               <button
                 type="button"
                 className={ownerType === 'self' ? styles.stepOptionActive : styles.stepOption}
-                onClick={() => {
-                  setOwnerType('self')
-                  goToStep('identity')
-                }}
+                onClick={() => setOwnerType('self')}
               >
                 <strong>본인</strong>
                 <span>제가 사용할 거예요</span>
@@ -624,18 +671,20 @@ export default function ModelDetailPage() {
               <button
                 type="button"
                 className={ownerType === 'family' ? styles.stepOptionActive : styles.stepOption}
-                onClick={() => {
-                  setOwnerType('family')
-                  goToStep('identity')
-                }}
+                onClick={() => setOwnerType('family')}
               >
                 <strong>가족</strong>
-                <span>자녀의 휴대폰을 대신 신청할게요</span>
+                <span>휴대폰을 대신 신청</span>
               </button>
             </div>
-            <p className={styles.stepNote}>
-              미성년자 자녀의 휴대폰만 보호자가 대신 신청할 수 있어요
-            </p>
+            <button
+              type="button"
+              className={`${styles.stepNextBtn} ${ownerType ? styles.stepNextBtnActive : ''}`}
+              disabled={!ownerType}
+              onClick={() => ownerType && goToStep('identity')}
+            >
+              다음
+            </button>
           </div>
         </div>
       )}
@@ -643,8 +692,16 @@ export default function ModelDetailPage() {
       {wizardStep === 2 && (
         <div className={styles.stepOverlay}>
           <div className={styles.stepCard}>
-            <div className={styles.stepProgress}>
-              <div className={`${styles.stepProgressBar} ${styles.stepProgressBarWide}`} />
+            <div className={styles.stepper}>
+              <div className={styles.stepperItem}><span className={styles.stepperDone}>✓</span></div>
+              <div className={styles.stepperLine + ' ' + styles.stepperLineDone} />
+              <div className={styles.stepperItem}><span className={styles.stepperCurrent}>2</span></div>
+              <div className={styles.stepperLine} />
+              <div className={styles.stepperItem}><span className={styles.stepperNum}>3</span></div>
+              <div className={styles.stepperLine} />
+              <div className={styles.stepperItem}><span className={styles.stepperNum}>4</span></div>
+              <div className={styles.stepperLine} />
+              <div className={styles.stepperItem}><span className={styles.stepperNum}>5</span></div>
             </div>
             <h2 className={styles.stepTitle}>개통할 본인의 정보를 입력해주세요.</h2>
 
@@ -670,16 +727,58 @@ export default function ModelDetailPage() {
 
             <div className={styles.stepField}>
               <p className={styles.stepFieldLabel}>생년월일 8자리</p>
-              <input
-                type="text"
-                placeholder="2000-01-01"
-                className={styles.stepInput}
-                value={formatBirth(birth)}
-                onChange={(e) => {
-                  const digits = e.target.value.replace(/\D/g, '').slice(0, 8)
-                  setBirth(digits)
-                }}
-              />
+              <div className={styles.stepBirthRow}>
+                <input
+                  type="text"
+                  placeholder="2000"
+                  className={`${styles.stepInput} ${styles.stepInputYear}`}
+                  maxLength={4}
+                  value={birthYear}
+                  onChange={(e) => {
+                    const digits = e.target.value.replace(/\D/g, '').slice(0, 4)
+                    if (digits.length === 4) {
+                      const y = parseInt(digits, 10)
+                      if (y < 1900 || y > new Date().getFullYear()) return
+                    }
+                    setBirthYear(digits)
+                  }}
+                />
+                <span className={styles.stepBirthDash}>-</span>
+                <input
+                  type="text"
+                  placeholder="01"
+                  className={`${styles.stepInput} ${styles.stepInputMD}`}
+                  maxLength={2}
+                  value={birthMonth}
+                  onChange={(e) => {
+                    const digits = e.target.value.replace(/\D/g, '').slice(0, 2)
+                    if (digits.length === 2) {
+                      const m = parseInt(digits, 10)
+                      if (m < 1 || m > 12) return
+                    }
+                    setBirthMonth(digits)
+                  }}
+                />
+                <span className={styles.stepBirthDash}>-</span>
+                <input
+                  type="text"
+                  placeholder="01"
+                  className={`${styles.stepInput} ${styles.stepInputMD}`}
+                  maxLength={2}
+                  value={birthDay}
+                  onChange={(e) => {
+                    const digits = e.target.value.replace(/\D/g, '').slice(0, 2)
+                    if (digits.length === 2) {
+                      const d = parseInt(digits, 10)
+                      const y = parseInt(birthYear, 10) || 2000
+                      const m = parseInt(birthMonth, 10) || 1
+                      const maxDay = new Date(y, m, 0).getDate()
+                      if (d < 1 || d > maxDay) return
+                    }
+                    setBirthDay(digits)
+                  }}
+                />
+              </div>
             </div>
 
             <div className={styles.stepField}>
@@ -697,7 +796,11 @@ export default function ModelDetailPage() {
                   placeholder="0000"
                   className={`${styles.stepInput} ${styles.stepInputSmall}`}
                   value={phoneMid}
-                  onChange={(e) => setPhoneMid(e.target.value)}
+                  maxLength={4}
+                  onChange={(e) => {
+                    const digits = e.target.value.replace(/\D/g, '').slice(0, 4)
+                    setPhoneMid(digits)
+                  }}
                 />
                 <span className={styles.stepPhoneDash}>-</span>
                 <input
@@ -713,7 +816,7 @@ export default function ModelDetailPage() {
             {/** Next button faolligi: o‘rtadagi 4 ta raqam to‘liq bo‘lsa */}
             {(() => {
               const onlyDigits = /^\d{4}$/.test(phoneMid)
-              const enabled = onlyDigits && birth.length === 8
+              const enabled = onlyDigits && birthFull
               return (
                 <button
                   type="button"
@@ -721,7 +824,7 @@ export default function ModelDetailPage() {
                   disabled={!enabled}
                   onClick={() => enabled && goToStep('notice')}
                 >
-                  다음으로
+                  다음
                 </button>
               )
             })()}
@@ -732,8 +835,16 @@ export default function ModelDetailPage() {
       {wizardStep === 3 && (
         <div className={styles.stepOverlay}>
           <div className={styles.stepCard}>
-            <div className={styles.stepProgress}>
-              <div className={`${styles.stepProgressBar} ${styles.stepProgressBarFull}`} />
+            <div className={styles.stepper}>
+              <div className={styles.stepperItem}><span className={styles.stepperDone}>✓</span></div>
+              <div className={styles.stepperLine + ' ' + styles.stepperLineDone} />
+              <div className={styles.stepperItem}><span className={styles.stepperDone}>✓</span></div>
+              <div className={styles.stepperLine + ' ' + styles.stepperLineDone} />
+              <div className={styles.stepperItem}><span className={styles.stepperCurrent}>3</span></div>
+              <div className={styles.stepperLine} />
+              <div className={styles.stepperItem}><span className={styles.stepperNum}>4</span></div>
+              <div className={styles.stepperLine} />
+              <div className={styles.stepperItem}><span className={styles.stepperNum}>5</span></div>
             </div>
             <h2 className={styles.stepTitle}>상품 유의사항을 확인해주세요</h2>
 
@@ -761,7 +872,7 @@ export default function ModelDetailPage() {
                     })
                   }
                 >
-                  확인했어요
+                  {noticeChecked[idx] ? '확인했어요' : '확인'}
                 </button>
               </div>
             ))}
@@ -777,7 +888,7 @@ export default function ModelDetailPage() {
                 }
               }}
             >
-              {allNoticesChecked ? '다음으로' : '모두 확인했어요'}
+              {allNoticesChecked ? '다음' : '모두 확인했어요'}
             </button>
           </div>
         </div>
@@ -786,8 +897,16 @@ export default function ModelDetailPage() {
       {wizardStep === 4 && (
         <div className={styles.stepOverlay}>
           <div className={styles.stepCard}>
-            <div className={styles.stepProgress}>
-              <div className={`${styles.stepProgressBar} ${styles.stepProgressBarFull}`} />
+            <div className={styles.stepper}>
+              <div className={styles.stepperItem}><span className={styles.stepperDone}>✓</span></div>
+              <div className={styles.stepperLine + ' ' + styles.stepperLineDone} />
+              <div className={styles.stepperItem}><span className={styles.stepperDone}>✓</span></div>
+              <div className={styles.stepperLine + ' ' + styles.stepperLineDone} />
+              <div className={styles.stepperItem}><span className={styles.stepperDone}>✓</span></div>
+              <div className={styles.stepperLine + ' ' + styles.stepperLineDone} />
+              <div className={styles.stepperItem}><span className={styles.stepperCurrent}>4</span></div>
+              <div className={styles.stepperLine} />
+              <div className={styles.stepperItem}><span className={styles.stepperNum}>5</span></div>
             </div>
             <h2 className={styles.stepTitle}>약관동의</h2>
 
@@ -833,7 +952,7 @@ export default function ModelDetailPage() {
                 </div>
                 <button
                   type="button"
-                  className={styles.agreeMore}
+                  className={`${styles.agreeMore} ${showServiceTerms ? styles.agreeMoreOpen : ''}`}
                   onClick={(e) => {
                     e.preventDefault()
                     e.stopPropagation()
@@ -845,7 +964,7 @@ export default function ModelDetailPage() {
               </label>
               {showServiceTerms && (
                 <div className={styles.agreeDetail}>
-                  <p className={styles.agreeDetailTitle}>(주)RelaxTomorrow 서비스 이용약관</p>
+                  <p className={styles.agreeDetailTitle}>(주)내일은편하게 서비스 이용약관</p>
                   {SERVICE_TERMS_TEXT.map((line) => (
                     <p key={line} className={styles.agreeDetailText}>
                       {line}
@@ -868,7 +987,7 @@ export default function ModelDetailPage() {
                 </div>
                 <button
                   type="button"
-                  className={styles.agreeMore}
+                  className={`${styles.agreeMore} ${showPrivacyTerms ? styles.agreeMoreOpen : ''}`}
                   onClick={(e) => {
                     e.preventDefault()
                     e.stopPropagation()
@@ -880,7 +999,7 @@ export default function ModelDetailPage() {
               </label>
               {showPrivacyTerms && (
                 <div className={styles.agreeDetail}>
-                  <p className={styles.agreeDetailTitle}>㈜RelaxTomorrow모바일 개인정보 제3자 제공 및 활용 동의</p>
+                  <p className={styles.agreeDetailTitle}>㈜내일은편하게모바일 개인정보 제3자 제공 및 활용 동의</p>
                   {PRIVACY_TERMS_TEXT.map((line) => (
                     <p key={line} className={styles.agreeDetailText}>
                       {line}
@@ -894,8 +1013,76 @@ export default function ModelDetailPage() {
               type="button"
               className={`${styles.agreeBtn} ${agreeService && agreePrivacy ? styles.agreeBtnActive : ''}`}
               disabled={!(agreeService && agreePrivacy)}
+              onClick={() => agreeService && agreePrivacy && goToStep('ars')}
             >
               약관동의
+            </button>
+          </div>
+        </div>
+      )}
+
+      {wizardStep === 5 && (
+        <div className={styles.stepOverlay}>
+          <div className={styles.stepCard}>
+            <div className={styles.stepper}>
+              <div className={styles.stepperItem}><span className={styles.stepperDone}>✓</span></div>
+              <div className={styles.stepperLine + ' ' + styles.stepperLineDone} />
+              <div className={styles.stepperItem}><span className={styles.stepperDone}>✓</span></div>
+              <div className={styles.stepperLine + ' ' + styles.stepperLineDone} />
+              <div className={styles.stepperItem}><span className={styles.stepperDone}>✓</span></div>
+              <div className={styles.stepperLine + ' ' + styles.stepperLineDone} />
+              <div className={styles.stepperItem}><span className={styles.stepperDone}>✓</span></div>
+              <div className={styles.stepperLine + ' ' + styles.stepperLineDone} />
+              <div className={styles.stepperItem}><span className={styles.stepperCurrent}>5</span></div>
+            </div>
+            <h2 className={styles.stepTitle}>ARS 전화 인증하기</h2>
+            {arsLoading ? (
+              <p className={styles.arsDesc}>코드를 생성하고 있습니다...</p>
+            ) : (
+              <>
+                <p className={styles.arsDesc}>{arsPhone}로 전화를 걸어 ARS 인증을 진행해주세요.</p>
+                <a href={`tel:${arsPhone.replace(/-/g, '')}`} className={styles.arsPhone}>
+                  <span className={styles.arsPhoneIcon}>📞</span>
+                  {arsPhone}
+                </a>
+                <div className={styles.arsCodeRow}>
+                  {arsCode.split('').map((digit, i) => (
+                    <span key={i} className={styles.arsCodeDigit}>{digit}</span>
+                  ))}
+                </div>
+                <p className={styles.arsTimerText}>
+                  {String(Math.floor(arsTimer / 60)).padStart(2, '0')}:{String(arsTimer % 60).padStart(2, '0')}
+                </p>
+                {arsError && <p className={styles.arsError}>{arsError}</p>}
+              </>
+            )}
+            <div style={{ flex: 1 }} />
+            <button
+              type="button"
+              className={`${styles.stepNextBtn} ${styles.stepNextBtnActive}`}
+              onClick={async () => {
+                if (arsId) {
+                  try {
+                    const result = await apiVerifyArsCode(arsId, arsCode)
+                    if (result.verified) {
+                      if (arsIntervalRef.current) clearInterval(arsIntervalRef.current)
+                      goToStep(null)
+                      alert('전화 인증이 완료되었습니다!')
+                    } else {
+                      setArsError(result.message || '인증에 실패했습니다.')
+                    }
+                  } catch (err) {
+                    setArsError('서버 연결에 실패했습니다.')
+                  }
+                } else {
+                  // Demo rejim (backend yo'q)
+                  if (arsIntervalRef.current) clearInterval(arsIntervalRef.current)
+                  goToStep(null)
+                  alert('전화 인증이 완료되었습니다!')
+                }
+              }}
+            >
+              전화 인증을 완료했어요
             </button>
           </div>
         </div>

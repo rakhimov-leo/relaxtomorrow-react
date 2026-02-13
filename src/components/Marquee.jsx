@@ -4,14 +4,12 @@ import styles from './Marquee.module.css'
 const ITEMS = [
   { label: '갤럭시 S25', to: '/model/galaxy-s25-5g' },
   { label: '아이폰 17', to: '/model/iphone-17' },
-  { label: '셀프가입', to: '/' },
-  { label: '사전예약', to: '/' },
-  { label: '특가', to: '/' },
-  { label: 'Samsung', to: '/' },
-  { label: 'Apple', to: '/' },
-  { label: 'SKT', to: '/?carrier=skt' },
-  { label: 'KT', to: '/?carrier=kt' },
-  { label: 'LG U+', to: '/?carrier=lg' },
+  { label: '갤럭시 Z플립7', to: '/model/galaxy-zflip7' },
+  { label: '갤럭시 Z폴드7', to: '/model/galaxy-zfold7' },
+  { label: '갤럭시 S25 Ultra', to: '/model/galaxy-s25-ultra-5g' },
+  { label: '아이폰 16', to: '/model/iphone-16' },
+  { label: '갤럭시 S25+ 5G', to: '/model/galaxy-s25-plus-5g' },
+  { label: '갤럭시 S24 FE', to: '/model/galaxy-s24-fe' },
 ]
 
 export default function Marquee() {

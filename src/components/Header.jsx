@@ -6,8 +6,9 @@ export default function Header() {
     <header className={styles.header}>
       <div className={styles.inner}>
         <Link to="/" className={styles.logo}>
-          내일은편하게 mobile
+          <img src="/logo.png" alt="내일은편하게 모바일" className={styles.logoImg} />
         </Link>
+        <a href="/contact" className={styles.contactBtn}>문의하기</a>
       </div>
     </header>
   )

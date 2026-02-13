@@ -36,8 +36,6 @@ export default function DealsPage() {
         <HeroSection />
         <Marquee />
         <div className={styles.inner}>
-          <SpotlightSection title="가장 많이 본 기기" items={getMostViewed()} />
-          <SpotlightSection title="많이 팔린 폰" items={getBestSelling()} />
           <div
             ref={contentRef}
             className={`${styles.contentRow} ${contentInView ? styles.reveal : ''}`}
@@ -49,10 +47,6 @@ export default function DealsPage() {
               <CarrierFilter value={carrier} onChange={setCarrier} />
             </section>
             <ModelImagePanel selectedModel={brand} />
-          </div>
-
-          <div ref={gridRef} className={`${styles.gridWrap} ${gridInView ? styles.reveal : ''}`}>
-            <ProductGrid brand={brand} storage={storage} carrier={carrier} revealed={gridInView} />
           </div>
         </div>
       </main>
