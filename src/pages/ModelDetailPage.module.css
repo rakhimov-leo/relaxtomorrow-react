@@ -169,7 +169,7 @@
   padding: 16px 24px;
   border: none;
   border-radius: 10px;
-  background: #6366f1;
+  background: #5F37E7;
   color: #fff;
   font-size: 1.05rem;
   font-weight: 600;
@@ -178,7 +178,7 @@
 }
 
 .btnApply:hover {
-  background: #4f46e5;
+  background: #4e2bd4;
 }
 
 /* ===== 하단 섹션: 통신사 | 요금 상세 ===== */
@@ -731,7 +731,7 @@
   padding: 16px 24px;
   border: none;
   border-radius: 10px;
-  background: #6366f1;
+  background: #5F37E7;
   color: #fff;
   font-size: 1.05rem;
   font-weight: 600;
@@ -740,7 +740,7 @@
 }
 
 .btnApplyFull:hover {
-  background: #4f46e5;
+  background: #4e2bd4;
 }
 
 .modalBackdrop {
